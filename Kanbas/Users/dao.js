@@ -12,8 +12,6 @@ export const findUserByUsername = (username) =>
     model.findOne({ username: username }); // or users.findOne({ username });
 export const findUserByCredentials = (username, password) =>
     model.findOne({ username: username, password: password });
-export const updateUser = (userId, user) =>
-    model.updateOne({ _id: userId }, { $set: user });
 export const deleteUser = (userId) => model.deleteOne({ _id: userId });
 
 export const findUsersByRole = (role) => model.find({ role: role }); // or just model.find({ role })
@@ -24,4 +22,6 @@ export const findUsersByPartialName = (partialName) => {
     });
 };
 
-export const findUsersLasActivity = (lastActivity) => model.find({ lastActivity: lastActivity });
+export const findUsersLastActivity = (lastActivity) => model.find({ lastActivity: lastActivity });
+export const updateUser = (userId, user, email, role) => 
+    model.updateOne({ _id: userId }, { $set: user }, {email: email}, {role: role});
