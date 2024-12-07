@@ -23,5 +23,5 @@ export const findUsersByPartialName = (partialName) => {
 };
 
 export const findUsersLastActivity = (lastActivity) => model.find({ lastActivity: lastActivity });
-export const updateUser = (userId, user, email, role) => 
-    model.updateOne({ _id: userId }, { $set: user }, {email: email}, {role: role});
+export const updateUser = (userId, user, email, role) =>
+    model.updateOne({ _id: userId }, { $set: user }, { email: email }, { role: role });
