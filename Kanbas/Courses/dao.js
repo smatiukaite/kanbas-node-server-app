@@ -1,32 +1,25 @@
-import Database from "../Database/index.js";
-export function findAllCourses() {
-    return Database.courses;
+import model from "./model.js";
+
+export async function findAllCourses() {
+    return await model.find(); // Fetch all courses
 }
 
-export function findCoursesForEnrolledUser(userId) {
-    const { courses, enrollments } = Database;
-    const enrolledCourses = courses.filter((course) =>
-        enrollments.some((enrollment) => enrollment.user === userId && enrollment.course === course._id));
-    return enrolledCourses;
+export async function findCoursesForEnrolledUser(userId) {
+    // Assuming you have an `Enrollment` model to handle course-user relationships
+    const enrollments = await EnrollmentModel.find({ user: userId });
+    const courseIds = enrollments.map((enrollment) => enrollment.course);
+    return await model.find({ _id: { $in: courseIds } });
 }
 
-export function createCourse(course) {
-    const newCourse = { ...course, _id: Date.now().toString() };
-    Database.courses = [...Database.courses, newCourse];
-    return newCourse;
+export async function createCourse(course) {
+    delete course._id; // Remove `_id` if provided
+    return await model.create(course);
 }
 
-export function deleteCourse(courseId) {
-    const { courses, enrollments } = Database;
-    Database.courses = courses.filter((course) => course._id !== courseId);
-    Database.enrollments = enrollments.filter(
-      (enrollment) => enrollment.course !== courseId
-  );}
-  
-  export function updateCourse(courseId, courseUpdates) {
-    const { courses } = Database;
-    const course = courses.find((course) => course._id === courseId);
-    Object.assign(course, courseUpdates);
-    return course;
-  }
-  
+export async function deleteCourse(courseId) {
+    return await model.deleteOne({ _id: courseId });
+}
+
+export async function updateCourse(courseId, courseUpdates) {
+    return await model.updateOne({ _id: courseId }, { $set: courseUpdates });
+}
