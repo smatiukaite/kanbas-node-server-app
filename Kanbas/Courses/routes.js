@@ -18,7 +18,7 @@ export default function CourseRoutes(app) {
         const courseUpdates = req.body;
         const status = dao.updateCourse(courseId, courseUpdates);
         res.send(status);
-    });
+    }); 
 
     app.get("/api/courses/:courseId/modules", (req, res) => {
         const { courseId } = req.params;
